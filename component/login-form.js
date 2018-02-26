@@ -32,7 +32,7 @@ export default state => {
       size='large'
       icon='github'
       color='black'
-      content='Se connecter' />)
+      content='Lie ton compte Github' />)
   } else {
     const googleBtn = <Button fluid
       size='large'
@@ -59,7 +59,7 @@ export default state => {
         icon='google'
         color='black'
         onClick={store.action.linkGithub}
-        content='Déconnecter' />)
+        content='Lie ton compte Github' />)
     }
   }
 

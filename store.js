@@ -175,17 +175,17 @@ const S = pxy(store => _onUpdate(_currentState = store), {
       const provider = new firebase.auth.GithubAuthProvider()
       provider.addScope('user')
       provider.addScope('repo')
-      provider.addScope('write:discussion ')
+      provider.addScope('write:discussion')
       provider.addScope('admin:org')
       const { credential, user } = await firebase.auth().signInWithPopup(provider)
-      S.user.githubToken = credential.accessToken
+      S.githubToken = credential.accessToken
 
       await Promise.all([
-        db.ref(`users/${user.uid}/token/github`).set(credential.accessToken),
-        ghUser.delete(),
+        _currentState.db.ref(`users/${user.uid}/token/github`).set(credential.accessToken),
+        user.delete(),
       ])
 
-      await user.linkWithCredential(credential)
+      await _currentState.user.linkWithCredential(credential)
     },
     check: async key => {
       const { db, user, checklist } = _currentState
