@@ -161,7 +161,7 @@ const S = pxy(store => _onUpdate(_currentState = store), {
       await Promise.all([
         _currentState.db.ref(`users/${currentUser.uid}/token/github`)
           .set(credential.accessToken),
-        user && user.delete(),
+        user && user.uid !== currentUser.uid && user.delete(),
       ])
 
       await currentUser.linkWithCredential(credential)
