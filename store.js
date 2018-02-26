@@ -178,6 +178,7 @@ const S = pxy(store => _onUpdate(_currentState = store), {
       provider.addScope('write:discussion')
       provider.addScope('admin:org')
       const { credential, user } = await firebase.auth().signInWithPopup(provider)
+      console.log('git gh credentials', credential, user)
       S.githubToken = credential.accessToken
 
       await Promise.all([

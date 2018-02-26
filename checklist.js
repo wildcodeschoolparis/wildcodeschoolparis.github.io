@@ -14,12 +14,20 @@ export default {
     link: 'https://odyssey.wildcodeschool.fr/users/login',
   },
   trello: {
-    message: 'Vérifier l\'access au trello',
+    message: 'Vérifier l\'access au trello, le parcourir',
     link: 'https://trello.com/b/CtSwCGOB/welcome-wilders',
   },
   rules: {
-    message: 'Lire le reglement intérieur',
+    message: 'Lire et signer le réglement intérieur',
     link: '/static/reglement-interieur-wild-code-school.pdf',
+  },
+  admin: {
+    message: 'Signer le contrat de formation',
+    link: '(voir campus manager)',
+  },
+  admin2: {
+    message: 'Signer l\'autorisation de cession du droit à l\'image',
+    link: '(voir campus manager)',
   },
   os: {
     message: 'Installer un linux (ex: Ubuntu)',
@@ -34,7 +42,7 @@ export default {
     link: 'https://www.sublimetext.com/3',
   },
   chrome: {
-    message: 'Installer Chromium (si vous n\'avez pas déjà Chrome',
+    message: 'Installer Chromium (si vous n\'avez pas déjà Chrome)',
     link: 'https://chromium.woolyss.com/',
   },
   node: {
