@@ -178,14 +178,14 @@ const S = pxy(store => _onUpdate(_currentState = store), {
       provider.addScope('write:discussion')
       provider.addScope('admin:org')
       const { credential, user } = await firebase.auth().signInWithPopup(provider)
-      console.log('git gh credentials', credential, user)
+        .catch(({ credential }) => ({ credential }))
       S.githubToken = credential.accessToken
 
       const currentUser = firebase.auth().currentUser
       await Promise.all([
         _currentState.db.ref(`users/${currentUser.uid}/token/github`)
           .set(credential.accessToken),
-        user.delete(),
+        user && user.delete(),
       ])
 
       await currentUser.linkWithCredential(credential)
