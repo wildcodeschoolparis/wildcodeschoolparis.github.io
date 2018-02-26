@@ -3,12 +3,6 @@ import { Button, Form, Header, Icon, Message, Segment } from 'semantic-ui-react'
 import store from '../store'
 import checklist from './onboarding-checklist'
 
-const signupNotice = (type, signUpUrl) =>
-  <Message key='notice'>
-    Pas de compte {type} ?
-    <a href={'https://'+ signUpUrl}> Sign Up</a>
-  </Message>
-
 const header = content =>
   <Header key='header' as='h2' textAlign='center'>
     {content}
@@ -19,7 +13,6 @@ export default state => {
   let message
   if (!state.user) {
     childrens.push(header('Connecte ton compte Google'))
-    message = signupNotice('google', 'accounts.google.com/SignUp')
     childrens.push(<Button fluid
       size='large'
       icon='google'
@@ -41,7 +34,6 @@ export default state => {
       onClick={store.action.signOut}
       content='Déconnecter' />
     if (state.githubToken) {
-      message = <Message textAlign='center' key='notice'>Tout semble bon !</Message>
       childrens.push(header(`Bienvenu ${state.user.displayName}`))
       childrens.push(googleBtn)
       childrens.push(<Button fluid disabled
@@ -52,7 +44,6 @@ export default state => {
         content='Compte lié' />)
     } else {
       childrens.push(header('Connecte ton compte Github'))
-      message = signupNotice('github', 'github.com/join')
       childrens.push(googleBtn)
       childrens.push(<Button fluid
         size='large'
@@ -62,8 +53,6 @@ export default state => {
         content='Lie ton compte Github' />)
     }
   }
-
-  message && childrens.push(message)
 
   childrens.push(checklist(state))
 

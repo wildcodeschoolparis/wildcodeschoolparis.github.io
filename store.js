@@ -31,52 +31,39 @@ const pxy = (propagate, base = {}, store = {}) => {
   })
 }
 
+
+
 const firebaseInitialized = (async () => {
   const firebase = await loader.firebase
   if (typeof window === 'undefined') return {} // skip load in node
-  firebase.initializeApp({
-    apiKey: 'AIzaSyB7L_HNksUk4M1OTe0FycuxvF_4Zq74VEE',
-    authDomain: 'wildcodeschoolparis.firebaseapp.com',
-    databaseURL: 'https://wildcodeschoolparis.firebaseio.com',
-    projectId: 'wildcodeschoolparis',
-    storageBucket: 'wildcodeschoolparis.appspot.com',
-    messagingSenderId: '115429394411',
-  })
+  try {
+    firebase.initializeApp({
+      apiKey: 'AIzaSyB7L_HNksUk4M1OTe0FycuxvF_4Zq74VEE',
+      authDomain: 'wildcodeschoolparis.firebaseapp.com',
+      databaseURL: 'https://wildcodeschoolparis.firebaseio.com',
+      projectId: 'wildcodeschoolparis',
+      storageBucket: 'wildcodeschoolparis.appspot.com',
+      messagingSenderId: '115429394411',
+    })
+  } catch(err) {
+    if (!/already exists/.test(err.message)) { // skip error from hotreload
+      console.error('Firebase initialization error', err.stack)
+    }
+  }
 
+  const user = firebase.auth().currentUser
+    || (await new Promise(s => firebase.auth().onAuthStateChanged(s)))
+
+  user && (await initDb(user))
+
+  S.loading = false
   return firebase
 })()
 
-const gapiInitialized = (async () => {
-  if (typeof window === 'undefined') return {} // skip load in node
-  await forever
-  const gapi = await loader.gapi
-  console.log('init client')
-  await new Promise((s,f) =>
-    gapi.load('client:auth2', { callback: s, onerror: f }))
-  console.log('init apis')
-
-  await gapi.client.init({
-    discoveryDocs: config.google.discoveryDocs,
-    clientId: config.google.clientId,
-    scope: config.google.scope.join(' '),
-  })
-
-  console.log('signed', gapi.auth2.getAuthInstance().isSignedIn.get())
-  gapi.auth2.getAuthInstance().isSignedIn.get() && (await finishSignIn(gapi))
-  S.loading = false
-  return gapi
-})()
-
-const finishSignIn = async gapi => {
-  const gapiAuth = gapi.auth2.getAuthInstance()
-  const currentUser = gapiAuth.currentUser.get()
-  const idToken = gapiAuth.currentUser.get().getAuthResponse().id_token
-  console.log('finishing sign in')
-  const firebase = await firebaseInitialized
-  console.log('firebase initialized')
-  const creds = firebase.auth.GoogleAuthProvider.credential(idToken)
-  const user = S.user = await firebase.auth().signInWithCredential(creds)
-  console.log('firebase user signed')
+const initDb = async user => {
+  if (!user) throw Error('Failed to sign in firebase user')
+  S.user = user
+  console.log('firebase user retrived')
   const db = S.db = await firebase.database()
   console.log('firebase database retrived')
   db.get = ref => new Promise((s, f) =>
@@ -87,27 +74,19 @@ const finishSignIn = async gapi => {
 
   const noOp = _ => _
   const linkCache = Object.create(null)
-  db.link = (ref, map = noOp, to = ref) => {
-    if (linkCache[to]) return
-    linkCache[to] = true
-    const [ key, ...path ] = to.split('/').reverse()
-    const storeRef = path.reduceRight((src, key) => src[key], S)
-    db.ref(ref).on('value', s => storeRef[key] = map(s.val()))
-  }
+  db.link = (ref, map = noOp, to = ref) => linkCache[to]
+    || (linkCache[to] = new Promise(resolve => {
+      const [ key, ...path ] = to.split('/').reverse()
+      const storeRef = path.reduceRight((src, key) => src[key], S)
+      db.ref(ref).on('value', s => resolve(storeRef[key] = map(s.val())))
+    }))
 
-  S.services = {
-    gapi,
-    firebase,
-    drive: gapi.client.drive,
-    gmail: gapi.client.gmail,
-    calendar: gapi.client.calendar,
-  }
+  S.firebase = firebase
 
   const [ token, checklist, isTrainer ] = await Promise.all([
     db.get(`users/${user.uid}/token/github`),
     db.get(`users/${user.uid}/checklist`),
     db.get(`users/${user.uid}/trainer`),
-    db.ref(`users/${user.uid}/token/google`).set(idToken),
     db.ref(`id/${btoa(user.email)}`).set(user.uid),
     db.ref(`users/${user.uid}/profil`).set({
       id: user.uid,
@@ -129,46 +108,43 @@ const finishSignIn = async gapi => {
       return [ id, wilder ]
     }
     const hasId = ([ id, wilder ]) => wilder.id
-    const linkChecklist = ([ id, wilder ]) => {
-      db.link(`users/${wilder.id}/checklist`)
-      db.link(`validation/${wilder.id}`)
-    }
+    const linkChecklist = ([ id, wilder ]) => new Promise.all([
+      db.link(`users/${wilder.id}/checklist`),
+      db.link(`validation/${wilder.id}`),
+    ])
     db.link('id')
     setInterval(() => console.log(_currentState), 10000)
-    db.ref(`201802`).on('value', s => {
+    await new Promise((s, f) => db.ref(`201802`).on('value', s => {
       const wilders = s.val()
-      Object.entries(wilders)
+      Promise.all(Object.entries(wilders)
         .map(encodeEmails)
         .filter(hasId)
-        .forEach(linkChecklist)
+        .map(linkChecklist)).then(s, f)
       S.promo = wilders
-    })
+    }))
   }
+  return db
 }
 
 const S = pxy(store => _onUpdate(_currentState = store), {
   action: {
     signOut: async () => {
-      const [ gapi, firebase ] = await Promise.all([
-        gapiInitialized,
-        firebaseInitialized,
-      ])
-      await Promise.all([
-        gapi.auth2.getAuthInstance().signOut()
-          .then(() => console.log('gapi signout')),
-        firebase.auth().signOut()
-          .then(() => console.log('firebase signout')),
-      ])
+      const firebase = await firebaseInitialized
+      await firebase.auth().signOut()
+      console.log('firebase signout')
       S.user = undefined
     },
     signIn: async () => {
-      console.log('signin in')
-      const gapi = await gapiInitialized
-      gapi.auth2.getAuthInstance().signIn()
-      await new Promise(s =>
-        gapi.auth2.getAuthInstance().isSignedIn.listen(signed => signed && s()))
-      console.log('gapi signed')
-      return finishSignIn(gapi)
+      const firebase = await firebaseInitialized
+      const provider = new firebase.auth.GoogleAuthProvider()
+      provider.addScope('email')
+      provider.addScope('profile')
+      const { user, credential } = await firebase.auth()
+        .signInWithPopup(provider)
+        .catch(_ => _)
+
+      return (await initDb(user))
+        .ref(`users/${user.uid}/token/google`).set(credential.accessToken)
     },
     linkGithub: async () => {
       const firebase = await firebaseInitialized
