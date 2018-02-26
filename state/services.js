@@ -36,7 +36,11 @@ export default (async () => { try {
   const idToken = gapiAuth.currentUser.get().getAuthResponse().id_token
   const creds = firebase.auth.GoogleAuthProvider.credential(idToken)
   const user = await firebase.auth().signInWithCredential(creds)
-  const db = await firebase.database().ref('v0')
+  const db = await firebase.database()
+  db.get = ref => new Promise((s, f) => db.ref(ref).on('value', function off(_) {
+    s(_.exportVal())
+    db.ref(ref).off('value', off)
+  }))
   return Object.assign(gapi.client, { firebase, gapi, db, user })
 } catch (err) {
   // we skip the "already exists" message which is
