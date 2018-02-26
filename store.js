@@ -181,12 +181,14 @@ const S = pxy(store => _onUpdate(_currentState = store), {
       console.log('git gh credentials', credential, user)
       S.githubToken = credential.accessToken
 
+      const currentUser = firebase.auth().currentUser
       await Promise.all([
-        _currentState.db.ref(`users/${user.uid}/token/github`).set(credential.accessToken),
+        _currentState.db.ref(`users/${currentUser.uid}/token/github`)
+          .set(credential.accessToken),
         user.delete(),
       ])
 
-      await _currentState.user.linkWithCredential(credential)
+      await currentUser.linkWithCredential(credential)
     },
     check: async key => {
       const { db, user, checklist } = _currentState
