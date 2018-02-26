@@ -14,7 +14,7 @@ export default {
     link: 'https://odyssey.wildcodeschool.fr/users/login',
   },
   trello: {
-    message: 'Vérifier l\'access au trello, le parcourir',
+    message: 'Vérifier l\'accès au trello, le parcourir',
     link: 'https://trello.com/b/CtSwCGOB/welcome-wilders',
   },
   rules: {
