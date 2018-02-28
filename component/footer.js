@@ -1,6 +1,5 @@
 import { Grid, Segment, Container, List, Image, Icon } from 'semantic-ui-react'
 
-
 export default () => {
   return (
     <Segment

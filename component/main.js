@@ -1,16 +1,12 @@
 import React from 'react'
 import Head from 'next/head'
-import { Grid, Dimmer, Loader, Container, Segment } from 'semantic-ui-react'
+import { Dimmer, Loader, Container } from 'semantic-ui-react'
 import Menu from './menu'
 import Footer from './footer'
 import loader from '../state/loader'
 import config from '../config'
 import store from '../store'
-
-const toGrid = (el, key) =>
-  <div key={key}>
-    {el(store.getState())}
-  </div>
+import loginForm from './login-form'
 
 class Main extends React.Component {
   constructor() {
@@ -19,15 +15,14 @@ class Main extends React.Component {
     store.onUpdate(state => this.setState(state))
   }
   render() {
-    console.log('rendering', this.state)
     return <React.Fragment>
       {Menu(this.state)}
-      <Dimmer.Dimmable style={{marginTop: '7em'}} active={this.state.loading}>
+      <Dimmer.Dimmable>
         <Container text style={{ maxWidth: 900 }}>
           <Dimmer inverted active={this.state.loading}>
             <Loader>Chargement</Loader>
           </Dimmer>
-          {this.props.column.map(toGrid)}
+          {loginForm(this.state, this.props.view)}
         </Container>
       </Dimmer.Dimmable>
       {Footer(this.state)}
@@ -35,7 +30,7 @@ class Main extends React.Component {
   }
 }
 
-export default childrens => <React.Fragment>
+export default view => <React.Fragment>
   <Head>
     <title>Wild Code School Paris</title>
     <meta name="google-signin-cookiepolicy" content="single_host_origin" />
@@ -46,6 +41,10 @@ export default childrens => <React.Fragment>
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
       ></link>
+    <style>{`
+      body { height: fit-content; background; padding-top: 7em }
+      html { background: #1b1c1d }
+    `}</style>
   </Head>
-  <Main column={childrens}></Main>
+  <Main style={{ minHeight: '63vh' }} view={view}></Main>
 </React.Fragment>
