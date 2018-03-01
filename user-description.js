@@ -105,13 +105,13 @@ export const userDescription = {
     text: 'Une alternative OpenSource à Slack, outil de chat qui sert pour les discussions internes à la Wild. Gratuit et adaptable, grâce à lui nous sommes maîtres de nos données.',
     icon: 'chat'
   },
-  discourse: {
+  feedback: {
     type: 'ask',
     title:
-      <a href='http://discourse.innoveduc.fr/u/'>
-        Compte Discourse
+      <a href='http://feedback.wildcodeschool.fr/entry/register?Target=categories'>
+        Compte Feedback
       </a>,
-    text: 'Forum de la Wild, utile pour les suggestions, rapports de bugs et tout autre discussion construite.',
+    text: 'Forum de feedback de la Wild, utile pour les suggestions et rapports de bugs',
     icon: 'leanpub'
   },
   drive: {
