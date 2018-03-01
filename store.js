@@ -115,19 +115,26 @@ const S = pxy(store => _onUpdate(_currentState = store), {
         const { credential, user } = await auth.signInWithPopup(provider)
           .catch(noOp)
 
-        console.log('github', { credential, user })
-        await Promise.all([
-          db.ref(`user/${uid}/github`)
-            .set(await getLogin(credential.accessToken)),
-          db.ref(`private/${currentUser.uid}/githubToken`)
-            .set(credential.accessToken),
-          user && (user.uid !== currentUser.uid) && user.delete(),
-        ])
-
+        console.log('github signed in', { credential, user })
         S.githubToken = credential.accessToken
 
-        await currentUser.linkWithCredential(credential)
-        await auth.signInWithCredential(credential)
+        if (!user || user.uid !== currentUser.uid) {
+          console.log('linkink accounts')
+          await user && user.delete()
+          await currentUser.linkWithCredential(credential).catch(noOp)
+          console.log('accounts linked')
+          await auth.signInWithCredential(credential)
+          console.log('signed back in')
+        }
+
+        await Promise.all([
+          db.ref(`user/${uid}/github`)
+            .set(await getLogin(credential.accessToken).catch(() => null)),
+          db.ref(`private/${currentUser.uid}/githubToken`)
+            .set(credential.accessToken),
+        ])
+
+        console.log('credentials and login saved')
       },
     },
     signOut: async () => {
