@@ -1,18 +1,7 @@
 import loader from './state/loader'
 import config from './config'
-import Router from 'next/router'
-
-Router.onRouteChangeStart = url => S.loading = true
-Router.onRouteChangeComplete = url => (S.route = url, S.loading = false)
 
 const noOp = _ => _
-
-typeof __NEXT_DATA__ !== 'undefined' && setTimeout(() => {
-  // trigger re-render with __NEXT_DATA__, a bit hacky, sorry mom
-  S.route = __NEXT_DATA__.pathname
-  S.query = __NEXT_DATA__.query
-  S.props = __NEXT_DATA__.props
-})
 
 const forever = new Promise((s) =>s())
 const LOADING = {}
@@ -21,6 +10,8 @@ let _onUpdate = () => {}
 let _currentState = {
   loading: true,
   promoInfo: {},
+  promo: {},
+  fallbackUrl: 'https://images-na.ssl-images-amazon.com/images/I/61nVe1UpNTL._SX522_.jpg',
 }
 
 

@@ -54,6 +54,7 @@ const actionBtn = word => (key, props) =>
     <Grid.Column width="13">{props.text}</Grid.Column>
     <Grid.Column width="3">
       <Button fluid
+        color='blue'
         onClick={() => lockedFields[key] || store.action.userSet(key, word)}>{word}</Button>
     </Grid.Column>
   </List.Description>
@@ -89,10 +90,10 @@ const smallItem = value => value === true
   ? <Icon name='checkmark' />
   : value
 
-const listItem = ([ key, props ], state) => props.type === 'divider'
+const listItem = ([ key, props ], user) => props.type === 'divider'
   ? catDivider(key, props)
-  : state.user && state.user[key]
-  ? wrapSmallItem(key, props, smallItem(state.user[key]))
+  : user && user[key]
+  ? wrapSmallItem(key, props, smallItem(user[key]))
   : wrapBigItem(key, props, fullItem[props.type](key, props))
 
 const userEntries = Object.entries(userDescription)
@@ -120,9 +121,9 @@ const css = `
   padding-top: 1.5em;
 }`
 
-const fallbackUrl = 'https://images-na.ssl-images-amazon.com/images/I/61nVe1UpNTL._SX522_.jpg'
-const view = state => {
-  const progress = calcProgress(state.user)
+const view = (state, { router: { pathname, query } }) => {
+  const user = state.promo[query && query.wilder] || state.user
+  const progress = calcProgress(user)
   return (
     <List divided relaxed>
       <style>{css}</style>
@@ -150,11 +151,11 @@ const view = state => {
         <image
           width="500"
           height="250"
-          xlinkHref={state.user.photo || fallbackUrl}
+          xlinkHref={user.photo || state.fallbackUrl}
           clipPath="url(#circleView)" />
       </svg>
         <Header.Content>
-          {state.user.firstname || state.user.name || state.user.gmail}
+          {user.firstname || user.name || user.gmail}
           {progress < 1 ? ` ${Math.floor(progress*100)}%` : ''}
         </Header.Content>
       </Header>
@@ -167,7 +168,7 @@ const view = state => {
           <Icon name='sign out' />
         </Button>
       </Container>
-      {userEntries.map(entry => listItem(entry, state))}
+      {userEntries.map(entry => listItem(entry, user))}
     </List>
   )
 }

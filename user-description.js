@@ -167,7 +167,10 @@ const profilSteps = Object.entries(userDescription)
   .filter(([ key, { type } ]) => type !== 'divider' && type !== 'internal')
   .map(a => a[0])
 
-export const calcProgress = ((f, total) => user => f(total, user))
-  (new Function([ 'total', 'user' ], 'return ('+ profilSteps
-    .map(key => `Boolean(user[${JSON.stringify(key)}])`)
-    .join('+') + ')/total'), profilSteps.length)
+export const totalSteps = profilSteps.length
+
+export const completedCount = new Function([ 'user' ], 'return '+ profilSteps
+  .map(key => `Boolean(user[${JSON.stringify(key)}])`)
+  .join('+'))
+
+export const calcProgress = user => completedCount(user) / totalSteps

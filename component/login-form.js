@@ -9,7 +9,7 @@ const header = content =>
     {content}
   </Header>
 
-export default (state, view) => !state.user
+export default (state, props, view) => !state.user
   ? <Container textAlign='center' style={{minHeight: '30vh'}}>
       {header('Connecte ton compte Google')}
       <Button icon
@@ -21,4 +21,4 @@ export default (state, view) => !state.user
         Se connecter
       </Button>
     </Container>
-  : view(state)
+  : view(state, props)

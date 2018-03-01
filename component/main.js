@@ -7,6 +7,7 @@ import loader from '../state/loader'
 import config from '../config'
 import store from '../store'
 import loginForm from './login-form'
+import { withRouter } from 'next/router'
 
 class Main extends React.Component {
   constructor() {
@@ -16,19 +17,21 @@ class Main extends React.Component {
   }
   render() {
     return <React.Fragment>
-      {Menu(this.state)}
+      {Menu(this.state, this.props)}
       <Dimmer.Dimmable>
-        <Container text style={{ maxWidth: 900 }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <Dimmer inverted active={this.state.loading}>
             <Loader>Chargement</Loader>
           </Dimmer>
-          {loginForm(this.state, this.props.view)}
-        </Container>
+          {loginForm(this.state, this.props, this.props.view)}
+        </div>
       </Dimmer.Dimmable>
       {Footer(this.state)}
     </React.Fragment>
   }
 }
+
+const RoutedMain = withRouter(Main)
 
 export default view => <React.Fragment>
   <Head>
@@ -42,9 +45,9 @@ export default view => <React.Fragment>
       href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
       ></link>
     <style>{`
-      body { height: fit-content; background; padding-top: 7em }
+      body { height: auto; background; padding-top: 7em }
       html { background: #1b1c1d }
     `}</style>
   </Head>
-  <Main style={{ minHeight: '63vh' }} view={view}></Main>
+  <RoutedMain style={{ minHeight: '63vh' }} view={view}></RoutedMain>
 </React.Fragment>

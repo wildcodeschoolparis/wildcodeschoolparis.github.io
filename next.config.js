@@ -1,13 +1,16 @@
-
+const fs = require('fs')
 const debug = process.env.NODE_ENV !== "production"
 
+const pathMap = fs
+  .readdirSync('./pages')
+  .filter(filename => filename.endsWith('.js'))
+  .map(filename => filename ===  'index.js' ? '/' : ('/'+filename.slice(0, -3)))
+  .reduce((acc, page) => (acc[page] = { page }, acc), {})
+
 module.exports = {
-  exportPathMap: () => ({
-    '/': { page: '/' },
-    '/trainer': { page: '/trainer' },
-  }),
-  //assetPrefix: '',
-  assetPrefix: !debug ? '/' : '',
+  exportPathMap: () => pathMap,
+  assetPrefix: '',
+  // assetPrefix: !debug ? '/' : '', // for specific ghpages
   webpack: (config, { dev }) => {
     // Perform customizations to webpack config
     // console.log('webpack');

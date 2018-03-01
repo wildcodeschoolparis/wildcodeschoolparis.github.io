@@ -5,21 +5,20 @@ import Link from 'next/link'
 const isRouteEq = (a, b) => a === b
   || (a + '/') === b
 
-const L = (href, { state, value, header, prefetch }) =>
+const L = (href, { pathname, value, header, prefetch }) =>
   <Link href={href} prefetch={prefetch} passHref>
-    <Menu.Item as='a' header={header} active={isRouteEq(state.route, href)}>
+    <Menu.Item as='a' header={header} active={isRouteEq(pathname, href)}>
       {value || (href[1].toUpperCase() + href.slice(2).toLowerCase())}
     </Menu.Item>
   </Link>
 
-export default state => {
+export default (state, { router: { pathname } }) => {
   const user = state && state.user || {}
-
   return (
     <Menu fixed='top' inverted pointing>
       <Container>
         {L('/', {
-          state,
+          pathname,
           header: true,
           value:
             <React.Fragment>
@@ -31,11 +30,11 @@ export default state => {
               Wild Code School Paris
             </React.Fragment>,
         })}
-        { L('/refs', { state })}
+        { L('/refs', { pathname })}
         <Menu.Menu position='right'>
-          {user.role && L('/admin', { state })}
+          {user.role && L('/admin', { pathname })}
           { L('/profile', {
-              state,
+              pathname,
               value: <Icon
                 style={{ margin: 0 }}
                 size='big'
