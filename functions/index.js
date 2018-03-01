@@ -21,3 +21,13 @@ exports.initUserData = functions.auth.user()
   isTeam && (user.email = email)
   return userRef.update({ [uid]: user })
 })
+
+const ghEvents = {
+  create: () => { /**/ }
+}
+
+exports.githubWebhook = functions.https.onRequest((req, res) => {
+  console.log(req.url, req.body, req.param, req.params)
+  return res.end()
+    // return res.status(500).send('Something went wrong while posting the message to Slack.');
+})
