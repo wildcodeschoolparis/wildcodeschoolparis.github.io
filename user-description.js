@@ -8,34 +8,34 @@ export const userDescription = {
   },
   wildside: {
     type: 'ask',
-    title: 'Ton coté wild ?',
+    title: 'Ton côté wild ?',
     icon: 'paw'
   },
   travel: {
     type: 'ask',
-    title: 'Tu met combien de temps pour venir ?',
+    title: 'Tu mets combien de temps pour venir ?',
     icon: 'subway',
   },
   discovery: {
     type: 'ask',
-    title: 'Comment à tu découvert la programation ?',
+    title: 'Comment as-tu découvert la programmation ?',
     icon: 'search'
   },
   accounts: {
     type: 'divider',
-    title: 'Les comptes à créé',
-    text: 'La wild utilise diverses plateformes, tu peu créé ses 3 comptes tout seul',
+    title: 'Les comptes à créer',
+    text: 'La Wild utilise diverses plateformes, tu peux créer ces 3 comptes tout seul',
   },
   gmail: {
     type: 'account',
     title: 'Compte Google',
-    text: 'Requis pour l\'access au google drive et au google calendar',
+    text: 'Requis pour l\'access au Google Drive et au Google Calendar',
     icon: 'google',
   },
   email: {
     type: 'account',
     title: 'Compte Odyssey',
-    text: 'Odyssey sert a suivre vos quetes et autre progression interne à la wild.',
+    text: 'Odyssey sert à suivre vos quêtes et autre progression interne à la Wild.',
     icon: 'winner',
   },
   github: {
@@ -46,19 +46,19 @@ export const userDescription = {
   },
   legal: {
     type: 'divider',
-    title: 'Les Formalitées',
-    text: 'Toutes les paperasses à lire et à signer avec ton Campus Manager.',
+    title: 'Les Formalités',
+    text: 'Toutes la paperasse à lire et à signer avec ton Campus Manager.',
   },
   rules: {
     type: 'sign',
     title: 'Règlement Intérieur',
-    text: 'On en fait appel à votre bon sens, merci de respecté les autres et les locaux.',
+    text: 'On en fait appel à votre bon sens, merci de respecter les autres et les locaux.',
     icon: 'book',
   },
   contract: {
     type: 'sign',
     title: 'Contrat de formation',
-    text: 'Normalement ya pas trop de lignes, on à fait un effort.',
+    text: 'Normalement y a pas trop de lignes, on a fait un effort.',
     icon: 'legal',
   },
   privacy: {
@@ -70,7 +70,7 @@ export const userDescription = {
   civil: {
     type: 'sign',
     title: 'Attestation Responsabilité Civile',
-    text: 'À wild, on assure :) :) :)',
+    text: 'À Wild, on assure :) :) :)',
     icon: 'law',
   },
   idcard: {
@@ -84,7 +84,7 @@ export const userDescription = {
     title: 'Les Invitations',
     text:
       <span>
-        Normalement édouar s'occupe d'invité tout le monde sur les diverses
+        Normalement Édouard s'occupe d'inviter tout le monde sur les diverses
         plateformes.
         <br/>
         Si tu vois qu'il te manque des accès pense à bien vérifier tes emails.
@@ -92,8 +92,8 @@ export const userDescription = {
   },
   trello: {
     type: 'invite',
-    title: 'Trello de Bienvenu',
-    text: 'Trello est un outil super simple de gestion de projets. Cette board contient toutes les infos nescessaires pour bien démarrer ton aventure',
+    title: 'Trello de Bienvenue',
+    text: 'Trello est un outil super simple de gestion de projets. Cette board contient toutes les infos nécessaires pour bien démarrer ton aventure',
     icon: 'trello'
   },
   chat: {
@@ -102,7 +102,7 @@ export const userDescription = {
       <a href='https://chat.wildcodeschool.fr/account/profile'>
         Nom d'Utilisateur Rocket Chat
       </a>,
-    text: 'Une alternative OpenSource a Slack, outil de chat qui sert pour les discussions interne à la wild. Gratuit et adaptable, grace à lui nous somme maitre de nos donnée.',
+    text: 'Une alternative OpenSource à Slack, outil de chat qui sert pour les discussions internes à la Wild. Gratuit et adaptable, grâce à lui nous sommes maîtres de nos données.',
     icon: 'chat'
   },
   discourse: {
@@ -111,25 +111,25 @@ export const userDescription = {
       <a href='http://discourse.innoveduc.fr/u/'>
         Compte Discourse
       </a>,
-    text: 'Forum de la wild, utile pour les suggestion, rapports de bugs et tout autres discussions construites.',
+    text: 'Forum de la Wild, utile pour les suggestions, rapports de bugs et tout autre discussion construite.',
     icon: 'leanpub'
   },
   drive: {
     type: 'invite',
     title: 'Drive partagé',
-    text: 'Le drive est le centre de transit de tout les documents que te fournisse les formateurs. Tu y retrouvera les cours, sujets des projets, sujets des dojos etc...',
+    text: 'Le drive est le centre de transit de tous les documents que te fournissent les formateurs. Tu y retrouveras les cours, sujets des projets, sujets des dojos etc...',
     icon: 'folder',
   },
   calendar: {
     type: 'invite',
     title: 'Calendar partagé',
-    text: 'C\'est le planing de ta session, bien qu\'il soit succeptible d\'etre changé, ça te donne les grandes lignes sur ce qui va suivre.',
+    text: 'C\'est le planning de ta session, bien qu\'il soit susceptible d\'être changé, ça te donne les grandes lignes sur ce qui va suivre.',
     icon: 'calendar',
   },
   ghteam: {
     type: 'invite',
     title: 'Team Github',
-    text: 'C\'est une invitation dans l\'organisation github de l\'école qui te donne accèss à du code privé.',
+    text: 'C\'est une invitation dans l\'organisation Github de l\'école qui te donne accès à du code privé.',
     icon: 'github alternate',
   },
   setup: {
@@ -137,16 +137,16 @@ export const userDescription = {
     title: 'Le Setup',
     text:
       <span>
-        Assure toi d'avoir ton ordi en ordre pour démarrer rapidement.
+        Assure-toi d'avoir ton ordi en ordre pour démarrer rapidement.
         <br/>
-        Si tu n'à toujours pas d'ordi, demande à l'équipe de t'en fournir
+        Si tu n'as toujours pas d'ordi, demande à l'équipe de t'en fournir
         un contre caution (500€).
       </span>,
   },
   os: {
     type: 'install',
     title: 'Un system Unix (un linux ou macOS)',
-    text: 'Désolé bill gates, sans rancunes.',
+    text: 'Désolé Bill Gates, sans rancune.',
     icon: 'linux',
   },
   editor: {
@@ -158,7 +158,7 @@ export const userDescription = {
   browser: {
     type: 'install',
     title: 'Installer Chromium (ou Chrome)',
-    text: 'Chrome regorge d\'outils et fonctionnalitées pour débuger le javascript.',
+    text: 'Chrome regorge d\'outils et fonctionnalités pour débugger le JavaScript.',
     icon: 'world'
   },
 }
